@@ -5,9 +5,9 @@ const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
-const mongoUri = require('./config/mongo.js').mongoURI;
+const mongoURI = require('./config/keys').mongoURI;
 const userRoutes = require('./routes/users');
-const sessionSecret = require('./config/sessionSecret');
+const sessionSecret = require('./config/keys').sessionSecret;
 
 // Passport config
 require('./config/passport')(passport)
@@ -27,7 +27,7 @@ app.use(userRoutes);
 
 // Connect to mongoDB
 mongoose.connect(
-  mongoUri,
+  mongoURI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -9,7 +9,7 @@ router.get('/', requireAuth, (req, res) => {
 })
 
 router.get('/login', (req, res) => {
-  res.send({errors: ["You must be logged in to view our resources"]})
+  res.send({errors: ["You must login to view our resources"]})
 })
 
 router.post('/login', (req, res, next) => {
@@ -26,7 +26,7 @@ router.post('/signup', (req, res) => {
   let errors = [];
 
   if(!email || !password || !password2) {
-    errors.push("Please complete all fields");
+    errors.push("You must complete all fields");
   }
 
   if(password !== password2) {
