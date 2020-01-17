@@ -1,0 +1,4 @@
+node_modules
+config/auth.js
+config/mongo.js
+config/sessionSecret.js
