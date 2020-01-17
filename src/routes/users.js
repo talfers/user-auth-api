@@ -5,17 +5,17 @@ const passport = require('passport');
 const User = require('../models/User');
 
 router.get('/', requireAuth, (req, res) => {
-  res.send({message: "You are authenticated!"});
+  res.status(200).send({message: "You are authenticated!"});
 })
 
-router.get('/login', (req, res) => {
-  res.send({errors: ["You must login to view our resources"]})
+router.get('/notfound', (req, res) => {
+  res.status(404).send({errors: ["Entered credentials incorrect"]})
 })
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: '/notfound',
     failureFlash: false
   })(req, res, next);
 })
@@ -38,19 +38,19 @@ router.post('/signup', (req, res) => {
   }
 
   if(errors.length > 0) {
-    res.send({errors: errors});
+    res.status(401).send({errors: errors});
   } else {
     User.findOne({email:email})
       .then(async (user) => {
         if(user) {
-          res.send({errors: ["User already exists!"]})
+          res.status(403).send({errors: ["User already exists!"]})
         } else {
           const newUser = new User({
             email,
             password
           });
           await newUser.save()
-          res.send({user: newUser.email})
+          res.status(200).send({user: newUser.email})
         }
       })
   }
