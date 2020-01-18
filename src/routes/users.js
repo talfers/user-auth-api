@@ -6,11 +6,11 @@ const User = require('../models/User');
 
 router.get('/', requireAuth, (req, res) => {
   res.status(200).send({message: "You are authenticated!", loggedIn: true});
-})
+});
 
 router.get('/notfound', (req, res) => {
   res.send({errors: ["Invalid login credentials"]})
-})
+});
 
 router.post('/signin', (req, res, next) => {
   passport.authenticate('local', {
@@ -18,7 +18,7 @@ router.post('/signin', (req, res, next) => {
     failureRedirect: '/notfound',
     failureFlash: false
   })(req, res, next);
-})
+});
 
 router.post('/signup', (req, res) => {
   const { email, password, password2 } = req.body;
@@ -53,12 +53,13 @@ router.post('/signup', (req, res) => {
           res.status(200).send({user: newUser.email})
         }
       })
+      .catch(err => console.log(err));
   }
-})
+});
 
 router.get('/signout', (req, res) => {
   req.logout();
   res.send({message: "You are signed out", loggedIn: false})
-})
+});
 
 module.exports = router;
