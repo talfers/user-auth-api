@@ -5,14 +5,14 @@ const passport = require('passport');
 const User = require('../models/User');
 
 router.get('/', requireAuth, (req, res) => {
-  res.status(200).send({message: "You are authenticated!"});
+  res.status(200).send({message: "You are authenticated!", loggedIn: true});
 })
 
 router.get('/notfound', (req, res) => {
-  res.status(404).send({errors: ["Entered credentials incorrect"]})
+  res.send({errors: ["Invalid login credentials"]})
 })
 
-router.post('/login', (req, res, next) => {
+router.post('/signin', (req, res, next) => {
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/notfound',
@@ -38,12 +38,12 @@ router.post('/signup', (req, res) => {
   }
 
   if(errors.length > 0) {
-    res.status(401).send({errors: errors});
+    res.send({errors: errors});
   } else {
     User.findOne({email:email})
       .then(async (user) => {
         if(user) {
-          res.status(403).send({errors: ["User already exists!"]})
+          res.send({errors: ["User already exists!"]})
         } else {
           const newUser = new User({
             email,
@@ -54,6 +54,11 @@ router.post('/signup', (req, res) => {
         }
       })
   }
+})
+
+router.get('/signout', (req, res) => {
+  req.logout();
+  res.send({message: "You are signed out", loggedIn: false})
 })
 
 module.exports = router;
